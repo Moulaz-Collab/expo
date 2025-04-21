@@ -1,29 +1,90 @@
-{
-  "expo": {
-    "name": "HelloWorld",
-    "slug": "expo-template-blank",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
-  }
-}
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+
+// Sua configuração do Firebase
+const firebaseConfig = {
+  apiKey: "sua-chave-api",
+  authDomain: "seu-auth-domain",
+  projectId: "seu-project-id",
+  storageBucket: "seu-storage-bucket",
+  messagingSenderId: "seu-sender-id",
+  appId: "seu-app-id",
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+export { auth, db };
+import React, { useState } from 'react';
+import { TextInput, Button, View, Text } from 'react-native';
+import { auth } from './firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+
+const LoginScreen = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleLogin = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log('Login bem-sucedido', user);
+      })
+      .catch((error) => {
+        setErrorMessage(error.message);
+      });
+  };
+
+  return (
+    <View>
+      <TextInput
+        value={email}
+        onChangeText={setEmail}
+        placeholder="E-mail"
+        keyboardType="email-address"
+      />
+      <TextInput
+        value={password}
+        onChangeText={setPassword}
+        placeholder="Senha"
+        secureTextEntry
+      />
+      <Button title="Entrar" onPress={handleLogin} />
+      {errorMessage ? <Text>{errorMessage}</Text> : null}
+    </View>
+  );
+};
+
+export default LoginScreen;
+npm install react-native-webview
+import React from 'react';
+import { View, Text } from 'react-native';
+import { WebView } from 'react-native-webview';
+
+const CameraScreen = () => {
+  return (
+    <View style={{ flex: 1 }}>
+      <Text>Câmeras ao vivo</Text>
+      <WebView
+        source={{ uri: 'http://link-da-sua-camera' }} // Substitua pelo link de sua câmera
+        style={{ marginTop: 20 }}
+      />
+    </View>
+  );
+};
+
+export default CameraScreen;
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin <URL-do-seu-repositório-GitHub>
+git push -u origin master
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin <URL-do-seu-repositório-GitHub>
+git push -u origin master
+          
